@@ -1,0 +1,59 @@
+<!-- pages/recipes/add/add.wxml -->
+<view class="page">
+  <view class="container">
+    <view class="header">
+      <view class="title">{{isEdit ? '编辑私房菜' : '添加私房菜'}}</view>
+    </view>
+    
+    <view class="form-container">
+      <!-- 图片上传区域 -->
+      <view class="form-section">
+        <view class="section-title">菜品图片</view>
+        <view class="image-uploader">
+          <view class="image-list">
+            <view class="image-item" wx:for="{{recipe.images}}" wx:key="*this">
+              <image class="uploaded-image" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}"></image>
+              <view class="delete-icon" bindtap="deleteImage" data-index="{{index}}">×</view>
+            </view>
+            
+            <view class="upload-btn" bindtap="chooseImage" wx:if="{{recipe.images.length < maxImageCount}}">
+              <view class="upload-icon">+</view>
+              <view class="upload-text">添加图片</view>
+            </view>
+          </view>
+          <view class="tip-text">最多上传{{maxImageCount}}张图片</view>
+        </view>
+      </view>
+      
+      <!-- 菜名输入区域 -->
+      <view class="form-section">
+        <view class="section-title">菜名</view>
+        <input class="input" placeholder="请输入菜名" value="{{recipe.dishName}}" bindinput="inputDishName" maxlength="30"></input>
+      </view>
+      
+      <!-- 介绍输入区域 -->
+      <view class="form-section">
+        <view class="section-title">菜品介绍</view>
+        <view class="textarea-container">
+          <textarea class="textarea" placeholder="请简要介绍这道菜的特点、口味等" value="{{recipe.introduction}}" bindinput="inputIntroduction" maxlength="{{maxIntroLength}}"></textarea>
+          <view class="word-count">{{recipe.introduction.length}}/{{maxIntroLength}}</view>
+        </view>
+      </view>
+      
+      <!-- 做法输入区域 -->
+      <view class="form-section">
+        <view class="section-title">做法步骤</view>
+        <view class="textarea-container">
+          <textarea class="textarea method-textarea" placeholder="请详细描述这道菜的做法步骤" value="{{recipe.cookingMethod}}" bindinput="inputCookingMethod" maxlength="{{maxMethodLength}}"></textarea>
+          <view class="word-count">{{recipe.cookingMethod.length}}/{{maxMethodLength}}</view>
+        </view>
+      </view>
+      
+      <!-- 按钮区域 -->
+      <view class="btn-container">
+        <button class="btn-secondary" bindtap="goBack">取消</button>
+        <button class="btn-primary" bindtap="submitForm" disabled="{{submitting}}">{{isEdit ? '保存' : '提交'}}</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,41 @@
+<!-- pages/partners/partners.wxml -->
+<view class="page">
+  <view class="container">
+    <view class="header">
+      <view class="title">饭搭子管理</view>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading"></view>
+    </view>
+    
+    <view wx:elif="{{partners.length === 0}}" class="empty-container">
+      <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
+      <view class="empty-text">暂无饭搭子记录</view>
+      <button class="btn-primary" bindtap="goToIndex">返回首页</button>
+    </view>
+    
+    <view wx:else>
+      <view class="partner-list">
+        <view class="partner-item card" wx:for="{{partners}}" wx:key="_id">
+          <view class="partner-info">
+            <image class="partner-avatar" src="{{item.userInfo.avatarUrl}}" mode="aspectFill"></image>
+            <view class="partner-detail">
+              <view class="partner-name">{{item.userInfo.nickName}}</view>
+              <view class="partner-status {{item.isBlocked ? 'blocked' : ''}}">
+                {{item.isBlocked ? '已拉黑' : '正常'}}
+              </view>
+            </view>
+          </view>
+          
+          <view class="partner-actions">
+            <block wx:if="{{item.isBlocked}}">
+              <view class="action-btn unblock" bindtap="unblockPartner" data-id="{{item._id}}">解除拉黑</view>
+            </block>
+            <view class="action-btn delete" bindtap="deletePartner" data-id="{{item._id}}">删除</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

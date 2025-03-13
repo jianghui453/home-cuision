@@ -1,0 +1,74 @@
+<!-- pages/order/dining/dining.wxml -->
+<view class="page">
+  <view class="container">
+    <view class="header">
+      <view class="title">点单记录</view>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading"></view>
+    </view>
+    
+    <view wx:elif="{{!diningRecord}}" class="empty-container">
+      <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
+      <view class="empty-text">没有进行中的点单</view>
+      <button class="btn-primary" bindtap="goToIndex">返回首页</button>
+    </view>
+    
+    <view wx:else>
+      <view class="dining-info card">
+        <view class="dining-status">
+          <text class="status-text {{diningRecord.status === 'active' ? 'active' : 'ended'}}">{{diningRecord.status === 'active' ? '进行中' : '已结束'}}</text>
+        </view>
+        <view class="dining-time">
+          <text class="time-label">开始时间：</text>
+          <text class="time-value">{{diningRecord.startTime}}</text>
+        </view>
+        <view class="dining-time" wx:if="{{diningRecord.endTime}}">
+          <text class="time-label">结束时间：</text>
+          <text class="time-value">{{diningRecord.endTime}}</text>
+        </view>
+      </view>
+      
+      <view class="section-title">已点菜品</view>
+      
+      <view class="order-list">
+        <block wx:if="{{diningRecord.orders && diningRecord.orders.length > 0}}">
+          <view class="order-item card" wx:for="{{diningRecord.orders}}" wx:key="index">
+            <view class="order-info">
+              <view class="dish-name">{{item.dishName}}</view>
+              <view class="order-meta">
+                <text class="order-user">{{item.userName}}</text>
+                <text class="order-time">{{item.orderTime}}</text>
+              </view>
+            </view>
+            <view class="user-actions" wx:if="{{isOwner && diningRecord.status === 'active'}}">
+              <view class="block-btn" bindtap="blockUser" data-username="{{item.userName}}">拉黑</view>
+            </view>
+          </view>
+        </block>
+        
+        <view wx:else class="empty-orders">
+          <view class="empty-text">暂无点单</view>
+        </view>
+      </view>
+      
+      <view class="action-container" wx:if="{{diningRecord.status === 'active'}}">
+        <button class="btn-primary" bindtap="continueDining">继续点单</button>
+        <button class="btn-share" bindtap="showShareDialog">邀请好友</button>
+        <button wx:if="{{isOwner}}" class="btn-danger" bindtap="endDining">结束点单</button>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 分享弹窗 -->
+  <view class="share-dialog" wx:if="{{shareDialogVisible}}">
+    <view class="share-dialog-mask" bindtap="hideShareDialog"></view>
+    <view class="share-dialog-content">
+      <view class="share-dialog-title">邀请好友一起点餐</view>
+      <view class="share-dialog-desc">点击下方按钮，邀请好友加入点单</view>
+      <button class="share-btn" open-type="share">分享给好友</button>
+      <view class="share-dialog-close" bindtap="hideShareDialog">关闭</view>
+    </view>
+  </view>
+</view>

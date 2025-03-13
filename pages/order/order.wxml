@@ -1,0 +1,51 @@
+<!-- pages/order/order.wxml -->
+<view class="page">
+  <view class="container">
+    <view class="header">
+      <view class="title">点单</view>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading"></view>
+    </view>
+    
+    <view wx:elif="{{recipes.length === 0}}" class="empty-container">
+      <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
+      <view class="empty-text">暂无可点菜品</view>
+      <button class="btn-primary" bindtap="goToIndex">返回首页</button>
+    </view>
+    
+    <view wx:else>
+      <view class="tip-text">选择想吃的菜</view>
+      
+      <view class="dish-list">
+        <view class="dish-item card" wx:for="{{recipes}}" wx:key="_id">
+          <view class="dish-content">
+            <image class="dish-image" src="{{item.images[0]}}" mode="aspectFill"></image>
+            <view class="dish-info">
+              <view class="dish-name">{{item.dishName}}</view>
+              <view class="dish-desc text-secondary">{{item.introduction}}</view>
+            </view>
+          </view>
+          
+          <view class="select-btn {{selectedDishes.indexOf(item._id) > -1 ? 'selected' : ''}}" 
+                bindtap="selectDish" data-id="{{item._id}}">
+            <text wx:if="{{selectedDishes.indexOf(item._id) > -1}}">已选</text>
+            <text wx:else>选择</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="bottom-btn-container">
+        <button class="btn-primary submit-btn" bindtap="submitOrder" 
+                disabled="{{selectedDishes.length === 0 || isBlocked}}">
+          提交点单 (已选{{selectedDishes.length}}道)
+        </button>
+      </view>
+    </view>
+    
+    <view class="blocked-tip" wx:if="{{isBlocked}}">
+      <view class="blocked-text">您已被拉黑，无法参与点单</view>
+    </view>
+  </view>
+</view>

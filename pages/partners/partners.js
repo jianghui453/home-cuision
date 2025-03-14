@@ -9,6 +9,19 @@ Page({
   },
 
   onLoad: function() {
+    // 初始化云环境
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+    } else {
+      wx.cloud.init({
+        // env 参数说明：
+        // env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
+        // 此处请填入环境 ID, 如不填则使用默认环境（第一个创建的环境）
+        // env: 'my-env-id',
+        traceUser: true,
+      })
+    }
+    
     // 获取用户信息
     this.getUserInfo()
     
@@ -32,25 +45,41 @@ Page({
     
     this.setData({ loading: true })
     
-    db.collection('partners')
-      .where({
-        _openid: wx.cloud.getWXContext().OPENID
-      })
-      .get()
-      .then(res => {
-        that.setData({
-          partners: res.data,
-          loading: false
-        })
-      })
-      .catch(err => {
-        console.error('加载饭搭子失败', err)
+    // 获取云函数上下文
+    wx.cloud.callFunction({
+      name: 'getOpenId',
+      success: res => {
+        const openid = res.result.openid
+        
+        db.collection('partners')
+          .where({
+            _openid: openid
+          })
+          .get()
+          .then(res => {
+            that.setData({
+              partners: res.data,
+              loading: false
+            })
+          })
+          .catch(err => {
+            console.error('加载饭搭子失败', err)
+            wx.showToast({
+              title: '加载失败，请重试',
+              icon: 'none'
+            })
+            that.setData({ loading: false })
+          })
+      },
+      fail: err => {
+        console.error('获取用户openid失败', err)
         wx.showToast({
           title: '加载失败，请重试',
           icon: 'none'
         })
         that.setData({ loading: false })
-      })
+      }
+    })
   },
 
   // 解除拉黑

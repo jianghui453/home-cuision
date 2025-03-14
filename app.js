@@ -4,7 +4,7 @@ App({
     // 初始化云开发环境
     if (wx.cloud) {
       wx.cloud.init({
-        env: 'home-cuisine-env',
+        env: 'cloud1-3ge5o178a63ec946',
         traceUser: true
       })
     }

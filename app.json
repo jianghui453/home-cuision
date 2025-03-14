@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/recipes/recipes",
+    "pages/index/index",
     "pages/recipes/detail/detail",
     "pages/recipes/add/add",
     "pages/order/order",
@@ -14,6 +14,33 @@
     "navigationBarTitleText": "主厨私房菜",
     "navigationBarTextStyle": "black"
   },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF6B6B",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/recipes/recipes",
+        "text": "我的菜谱",
+        "iconPath": "images/recipe-icon.png",
+        "selectedIconPath": "images/recipe-icon.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "开始点单",
+        "iconPath": "images/order-icon.png",
+        "selectedIconPath": "images/order-icon.png"
+      },
+      {
+        "pagePath": "pages/partners/partners",
+        "text": "饭搭子管理",
+        "iconPath": "images/partner-icon.png",
+        "selectedIconPath": "images/partner-icon.png"
+      }
+    ]
+  },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "cloud":true
 }

@@ -1,38 +1,44 @@
 <!-- pages/recipes/recipes.wxml -->
 <view class="page">
   <view class="container">
-    <view class="header">
-      <view class="title">我的私房菜</view>
-      <button class="add-btn btn-primary" bindtap="goToAddRecipe">
-        <text class="add-icon">+</text> 添加私房菜
-      </button>
+    <view wx:if="{{!hasUserInfo && canIUse}}" class="login-container">
+      <button class="login-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录使用</button>
     </view>
     
-    <view class="recipe-list">
-      <view wx:if="{{loading}}" class="loading-container">
-        <view class="loading"></view>
+    <view wx:else>
+      <view class="header">
+        <view class="title">我的私房菜</view>
+        <button class="add-btn btn-primary" bindtap="goToAddRecipe">
+          <text class="add-icon">+</text> 添加私房菜
+        </button>
       </view>
       
-      <view wx:elif="{{recipes.length === 0}}" class="empty-container">
-        <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
-        <view class="empty-text">还没有添加菜谱哦~</view>
-        <button class="btn-primary" bindtap="goToAddRecipe">立即添加</button>
-      </view>
-      
-      <view wx:else class="recipe-items">
-        <view class="recipe-item card" wx:for="{{recipes}}" wx:key="_id" bindtap="goToRecipeDetail" data-id="{{item._id}}">
-          <view class="recipe-content">
-            <image class="recipe-image" src="{{item.images[0]}}" mode="aspectFill"></image>
-            <view class="recipe-info">
-              <view class="recipe-name">{{item.dishName}}</view>
-              <view class="recipe-desc text-secondary">{{item.introduction}}</view>
+      <view class="recipe-list">
+        <view wx:if="{{loading}}" class="loading-container">
+          <view class="loading"></view>
+        </view>
+        
+        <view wx:elif="{{recipes.length === 0}}" class="empty-container">
+          <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
+          <view class="empty-text">还没有添加菜谱哦~</view>
+          <button class="btn-primary" bindtap="goToAddRecipe">立即添加</button>
+        </view>
+        
+        <view wx:else class="recipe-items">
+          <view class="recipe-item card" wx:for="{{recipes}}" wx:key="_id" bindtap="goToRecipeDetail" data-id="{{item._id}}">
+            <view class="recipe-content">
+              <image class="recipe-image" src="{{item.images[0]}}" mode="aspectFill"></image>
+              <view class="recipe-info">
+                <view class="recipe-name">{{item.dishName}}</view>
+                <view class="recipe-desc text-secondary">{{item.introduction}}</view>
+              </view>
             </view>
-          </view>
-          
-          <!-- 左滑菜单 -->
-          <view class="slide-buttons">
-            <button class="edit-btn" catchtap="editRecipe" data-id="{{item._id}}">编辑</button>
-            <button class="delete-btn" catchtap="deleteRecipe" data-id="{{item._id}}">删除</button>
+            
+            <!-- 左滑菜单 -->
+            <view class="slide-buttons">
+              <button class="edit-btn" catchtap="editRecipe" data-id="{{item._id}}">编辑</button>
+              <button class="delete-btn" catchtap="deleteRecipe" data-id="{{item._id}}">删除</button>
+            </view>
           </view>
         </view>
       </view>

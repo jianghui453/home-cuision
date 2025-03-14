@@ -29,21 +29,21 @@ Page({
 
   // 跳转到我的菜谱页
   goToRecipes: function() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/recipes/recipes'
     })
   },
 
   // 跳转到点单页
   goToOrder: function() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/order/order'
     })
   },
   
   // 跳转到饭搭子管理页
   goToPartners: function() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/partners/partners'
     })
   },

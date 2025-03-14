@@ -12,6 +12,12 @@ Page({
     // 初始化云环境
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+      // 新增错误处理逻辑，可根据实际情况调整
+      wx.showModal({
+        title: '错误提示',
+        content: '请使用 2.2.3 或以上的基础库以使用云能力。',
+        showCancel: false
+      })
     } else {
       wx.cloud.init({
         // env 参数说明：
@@ -64,6 +70,12 @@ Page({
           })
           .catch(err => {
             console.error('加载饭搭子失败', err)
+            // 新增错误处理逻辑，可根据实际情况调整
+            wx.showModal({
+              title: '错误提示',
+              content: '加载饭搭子失败，请检查网络或稍后重试。',
+              showCancel: false
+            })
             wx.showToast({
               title: '加载失败，请重试',
               icon: 'none'
@@ -73,6 +85,12 @@ Page({
       },
       fail: err => {
         console.error('获取用户openid失败', err)
+        // 新增错误处理逻辑，可根据实际情况调整
+        wx.showModal({
+          title: '错误提示',
+          content: '获取用户openid失败，请检查网络或稍后重试。',
+          showCancel: false
+        })
         wx.showToast({
           title: '加载失败，请重试',
           icon: 'none'
@@ -108,6 +126,12 @@ Page({
           })
           .catch(err => {
             console.error('解除拉黑失败', err)
+            // 新增错误处理逻辑，可根据实际情况调整
+            wx.showModal({
+              title: '错误提示',
+              content: '解除拉黑失败，请检查网络或稍后重试。',
+              showCancel: false
+            })
             wx.showToast({
               title: '操作失败，请重试',
               icon: 'none'
@@ -140,8 +164,14 @@ Page({
             })
             .catch(err => {
               console.error('删除饭搭子失败', err)
+              // 新增错误处理逻辑，可根据实际情况调整
+              wx.showModal({
+                title: '错误提示',
+                content: '删除饭搭子失败，请检查网络或稍后重试。',
+                showCancel: false
+              })
               wx.showToast({
-                title: '删除失败，请重试',
+                title: '操作失败，请重试',
                 icon: 'none'
               })
             })
@@ -153,7 +183,7 @@ Page({
   // 返回首页
   goToIndex: function() {
     wx.switchTab({
-      url: '/pages/index/index'
+      url: '/pages/recipes/recipes'
     })
   }
 })

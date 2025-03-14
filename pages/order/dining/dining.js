@@ -38,7 +38,7 @@ Page({
       })
       setTimeout(() => {
         wx.switchTab({
-          url: '/pages/index/index'
+          url: '/pages/recipes/recipes'
         })
       }, 1500)
       return
@@ -64,6 +64,12 @@ Page({
           },
           fail: err => {
             console.error('获取用户openid失败', err)
+            // 新增错误处理逻辑，可根据实际情况调整
+            wx.showModal({
+              title: '错误提示',
+              content: '获取用户openid失败，请检查网络或稍后重试。',
+              showCancel: false
+            })
             that.setData({
               diningRecord: res.data,
               loading: false,
@@ -74,6 +80,12 @@ Page({
       })
       .catch(err => {
         console.error('加载点单记录失败', err)
+        // 新增错误处理逻辑，可根据实际情况调整
+        wx.showModal({
+          title: '错误提示',
+          content: '加载点单记录失败，请检查网络或稍后重试。',
+          showCancel: false
+        })
         wx.showToast({
           title: '加载失败，请重试',
           icon: 'none'
@@ -117,7 +129,7 @@ Page({
             // 返回首页
             setTimeout(() => {
               wx.switchTab({
-                url: '/pages/index/index'
+                
               })
             }, 1500)
           })
@@ -217,7 +229,7 @@ Page({
   // 返回首页
   goToIndex: function() {
     wx.switchTab({
-      url: '/pages/index/index'
+      url: '/pages/recipes/recipes'
     })
   }
 })

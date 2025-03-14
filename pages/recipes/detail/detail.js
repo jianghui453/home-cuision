@@ -37,6 +37,12 @@ Page({
       })
       .catch(err => {
         console.error('加载菜谱详情失败', err)
+        // 新增错误处理逻辑，可根据实际情况调整
+        wx.showModal({
+          title: '错误提示',
+          content: '加载菜谱详情失败，请检查网络或稍后重试。',
+          showCancel: false
+        })
         wx.showToast({
           title: '加载失败，请重试',
           icon: 'none'

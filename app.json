@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/recipes/recipes",
-    "pages/index/index",
     "pages/recipes/detail/detail",
     "pages/recipes/add/add",
     "pages/order/order",
@@ -29,7 +28,7 @@
       },
       {
         "pagePath": "pages/order/order",
-        "text": "开始点单",
+        "text": "干饭记录",
         "iconPath": "images/order-icon.png",
         "selectedIconPath": "images/order-icon.png"
       },

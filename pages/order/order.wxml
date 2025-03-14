@@ -19,23 +19,19 @@
       <button class="btn-primary create-btn" bindtap="startNewDining">发起点单</button>
       
       <view class="dining-list">
-        <view class="dining-item card" wx:for="{{diningRecords}}" wx:key="_id" bindtap="viewDiningDetail" data-id="{{item._id}}">
+        <view class="dining-item card" wx:for="{{diningRecords}}" wx:key="_id" bindtap="viewDiningDetail" data-id="{{item._id}}" style="border-radius: 16rpx; box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.08); transition: all 0.3s ease;">
           <view class="dining-content">
             <view class="dining-info">
               <view class="dining-status">
-                <text class="status-text {{item.status === 'active' ? 'active' : 'ended'}}">{{item.status === 'active' ? '进行中' : '已结束'}}</text>
+                <text class="status-text {{item.status === 'active' ? 'active' : 'ended'}}" style="padding: 8rpx 24rpx; font-size: 24rpx; border-radius: 8rpx;">{{item.status === 'active' ? '进行中' : '已结束'}}</text>
               </view>
-              <view class="dining-time">
-                <text class="time-label">开始时间：</text>
-                <text class="time-value">{{item.startTime}}</text>
+              <view class="dining-time" style="display: flex; justify-content: space-between; margin: 16rpx 0;">
+                <text class="time-label" style="color: #8c8c8c;">开始时间：</text>
+                <text class="time-value" style="color: #434343; font-weight: 500;">{{item.startTime}}</text>
               </view>
-              <view class="dining-time" wx:if="{{item.endTime}}">
-                <text class="time-label">结束时间：</text>
-                <text class="time-value">{{item.endTime}}</text>
-              </view>
-              <view class="dining-dishes">
-                <text class="dishes-label">已点菜品：</text>
-                <text class="dishes-value">{{item.dishCount}}道</text>
+              <view class="dining-time" wx:if="{{item.endTime}}" style="display: flex; justify-content: space-between; margin: 16rpx 0;">
+                <text class="time-label" style="color: #8c8c8c;">结束时间：</text>
+                <text class="time-value" style="color: #434343; font-weight: 500;">{{item.endTime}}</text>
               </view>
             </view>
           </view>

@@ -78,6 +78,26 @@
 .bottom-btn-container {
   margin-top: 40rpx;
   padding: 0 30rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-edit, .btn-delete {
+  width: 48%;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-edit:active, .btn-delete:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 5rpx rgba(0, 0, 0, 0.1);
 }
 
 .error-container {

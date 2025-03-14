@@ -25,19 +25,15 @@
         </view>
         
         <view wx:else class="recipe-items">
-          <view class="recipe-item card" wx:for="{{recipes}}" wx:key="_id" bindtap="goToRecipeDetail" data-id="{{item._id}}">
-            <view class="recipe-content">
-              <image class="recipe-image" src="{{item.images[0]}}" mode="aspectFill"></image>
-              <view class="recipe-info">
-                <view class="recipe-name">{{item.dishName}}</view>
-                <view class="recipe-desc text-secondary">{{item.introduction}}</view>
+          <view class="recipe-item-container" wx:for="{{recipes}}" wx:key="_id">
+            <view class="recipe-item card" bindtap="goToRecipeDetail" data-id="{{item._id}}">
+              <view class="recipe-content">
+                <image class="recipe-image" src="{{item.images[0]}}" mode="aspectFill"></image>
+                <view class="recipe-info">
+                  <view class="recipe-name">{{item.dishName}}</view>
+                  <view class="recipe-desc text-secondary">{{item.introduction}}</view>
+                </view>
               </view>
-            </view>
-            
-            <!-- 左滑菜单 -->
-            <view class="slide-buttons">
-              <button class="edit-btn" catchtap="editRecipe" data-id="{{item._id}}">编辑</button>
-              <button class="delete-btn" catchtap="deleteRecipe" data-id="{{item._id}}">删除</button>
             </view>
           </view>
         </view>

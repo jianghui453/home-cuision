@@ -2,50 +2,63 @@
 <view class="page">
   <view class="container">
     <view class="header">
-      <view class="title">点单</view>
+      <view class="title">干饭记录</view>
     </view>
     
     <view wx:if="{{loading}}" class="loading-container">
       <view class="loading"></view>
     </view>
     
-    <view wx:elif="{{recipes.length === 0}}" class="empty-container">
+    <view wx:elif="{{diningRecords.length === 0}}" class="empty-container">
       <image class="empty-image" src="/images/empty.png" mode="aspectFit"></image>
-      <view class="empty-text">暂无可点菜品</view>
-      <button class="btn-primary" bindtap="goToIndex">返回首页</button>
+      <view class="empty-text">暂无干饭记录</view>
+      <button class="btn-primary" bindtap="startNewDining">发起点单</button>
     </view>
     
     <view wx:else>
-      <view class="tip-text">选择想吃的菜</view>
+      <button class="btn-primary create-btn" bindtap="startNewDining">发起点单</button>
       
-      <view class="dish-list">
-        <view class="dish-item card" wx:for="{{recipes}}" wx:key="_id">
-          <view class="dish-content">
-            <image class="dish-image" src="{{item.images[0]}}" mode="aspectFill"></image>
-            <view class="dish-info">
-              <view class="dish-name">{{item.dishName}}</view>
-              <view class="dish-desc text-secondary">{{item.introduction}}</view>
+      <view class="dining-list">
+        <view class="dining-item card" wx:for="{{diningRecords}}" wx:key="_id" bindtap="viewDiningDetail" data-id="{{item._id}}">
+          <view class="dining-content">
+            <view class="dining-info">
+              <view class="dining-status">
+                <text class="status-text {{item.status === 'active' ? 'active' : 'ended'}}">{{item.status === 'active' ? '进行中' : '已结束'}}</text>
+              </view>
+              <view class="dining-time">
+                <text class="time-label">开始时间：</text>
+                <text class="time-value">{{item.startTime}}</text>
+              </view>
+              <view class="dining-time" wx:if="{{item.endTime}}">
+                <text class="time-label">结束时间：</text>
+                <text class="time-value">{{item.endTime}}</text>
+              </view>
+              <view class="dining-dishes">
+                <text class="dishes-label">已点菜品：</text>
+                <text class="dishes-value">{{item.dishCount}}道</text>
+              </view>
             </view>
           </view>
           
-          <view class="select-btn {{selectedDishes.indexOf(item._id) > -1 ? 'selected' : ''}}" 
-                bindtap="selectDish" data-id="{{item._id}}">
-            <text wx:if="{{selectedDishes.indexOf(item._id) > -1}}">已选</text>
-            <text wx:else>选择</text>
+          <view class="dining-owner" wx:if="{{item.isOwner}}">
+            <text class="owner-tag">我创建的</text>
           </view>
         </view>
       </view>
-      
-      <view class="bottom-btn-container">
-        <button class="btn-primary submit-btn" bindtap="submitOrder" 
-                disabled="{{selectedDishes.length === 0 || isBlocked}}">
-          提交点单 (已选{{selectedDishes.length}}道)
-        </button>
-      </view>
     </view>
-    
-    <view class="blocked-tip" wx:if="{{isBlocked}}">
-      <view class="blocked-text">您已被拉黑，无法参与点单</view>
+  </view>
+  
+  <!-- 分享弹窗 -->
+  <view class="share-dialog" wx:if="{{showShareDialog}}">
+    <view class="share-dialog-mask" bindtap="hideShareDialog"></view>
+    <view class="share-dialog-content">
+      <view class="share-dialog-title">点单创建成功</view>
+      <view class="share-dialog-desc">邀请好友一起点餐吧！</view>
+      <view class="share-dialog-btns">
+        <button class="share-btn" open-type="share">分享给好友</button>
+        <button class="continue-btn" bindtap="continueDining">继续点单</button>
+      </view>
+      <view class="share-dialog-close" bindtap="hideShareDialog">关闭</view>
     </view>
   </view>
 </view>

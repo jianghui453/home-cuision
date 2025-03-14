@@ -20,6 +20,11 @@
         <view class="menu-text">开始点单</view>
       </view>
       
+      <view class="menu-item" bindtap="goToDiningRecords">
+        <image class="menu-icon" src="/images/order-icon.png" mode="aspectFit"></image>
+        <view class="menu-text">干饭记录</view>
+      </view>
+      
       <view class="menu-item" bindtap="goToPartners">
         <image class="menu-icon" src="/images/partner-icon.png" mode="aspectFit"></image>
         <view class="menu-text">饭搭子管理</view>

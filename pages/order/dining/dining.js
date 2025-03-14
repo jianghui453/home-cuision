@@ -51,10 +51,25 @@ Page({
     
     db.collection('dining_records').doc(currentDining._id).get()
       .then(res => {
-        that.setData({
-          diningRecord: res.data,
-          loading: false,
-          isOwner: res.data._openid === wx.cloud.getWXContext().OPENID
+        // 使用云函数获取openid
+        wx.cloud.callFunction({
+          name: 'getOpenId',
+          success: openIdRes => {
+            const openid = openIdRes.result.openid
+            that.setData({
+              diningRecord: res.data,
+              loading: false,
+              isOwner: res.data._openid === openid
+            })
+          },
+          fail: err => {
+            console.error('获取用户openid失败', err)
+            that.setData({
+              diningRecord: res.data,
+              loading: false,
+              isOwner: false
+            })
+          }
         })
       })
       .catch(err => {

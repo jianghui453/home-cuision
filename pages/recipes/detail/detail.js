@@ -59,5 +59,44 @@ Page({
   // 返回上一页
   goBack: function() {
     wx.navigateBack()
+  },
+
+  // 编辑菜谱
+  editRecipe: function() {
+    const id = this.data.recipe._id
+    wx.navigateTo({
+      url: `/pages/recipes/add/add?id=${id}`
+    })
+  },
+
+  // 删除菜谱
+  deleteRecipe: function() {
+    const id = this.data.recipe._id
+    const that = this
+    
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除这个菜谱吗？',
+      success: function(res) {
+        if (res.confirm) {
+          const db = wx.cloud.database()
+          db.collection('recipes').doc(id).remove()
+            .then(() => {
+              wx.showToast({
+                title: '删除成功'
+              })
+              // 返回上一页并刷新列表
+              wx.navigateBack()
+            })
+            .catch(err => {
+              console.error('删除失败', err)
+              wx.showToast({
+                title: '删除失败，请重试',
+                icon: 'none'
+              })
+            })
+        }
+      }
+    })
   }
 })

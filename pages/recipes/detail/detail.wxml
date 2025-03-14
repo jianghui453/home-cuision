@@ -34,7 +34,8 @@
       
       <!-- 底部按钮区域 -->
       <view class="bottom-btn-container">
-        <button class="btn-primary" bindtap="goBack">返回</button>
+        <button class="btn-delete" style="background-color: #e74c3c; color: #ffffff;" bindtap="deleteRecipe">删除</button>
+        <button class="btn-edit" style="background-color: #3498db; color: #ffffff;" bindtap="editRecipe">编辑</button>
       </view>
     </view>
     

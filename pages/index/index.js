@@ -41,6 +41,13 @@ Page({
     })
   },
   
+  // 跳转到干饭记录页
+  goToDiningRecords: function() {
+    wx.switchTab({
+      url: '/pages/order/order'
+    })
+  },
+  
   // 跳转到饭搭子管理页
   goToPartners: function() {
     wx.switchTab({

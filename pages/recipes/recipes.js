@@ -7,7 +7,8 @@ Page({
     loading: true,
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    isFirstLoad: true // 添加标记，用于判断是否是首次加载
   },
 
   onLoad: function() {
@@ -17,7 +18,7 @@ Page({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-      this.loadRecipes()
+      this.loadRecipesWithCache()
     } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
@@ -26,16 +27,27 @@ Page({
           userInfo: res.userInfo,
           hasUserInfo: true
         })
-        this.loadRecipes()
+        this.loadRecipesWithCache()
       }
     }
   },
 
   onShow: function() {
-    // 每次页面显示时重新加载数据，确保数据最新
-    if (this.data.hasUserInfo) {
-      this.loadRecipes()
+    // 每次页面显示时检查是否有缓存数据
+    if (this.data.hasUserInfo && !this.data.isFirstLoad) {
+      // 非首次加载时，使用缓存数据
+      const cachedRecipes = app.globalData.cachedRecipes || []
+      if (cachedRecipes.length > 0) {
+        this.setData({
+          recipes: cachedRecipes,
+          loading: false
+        })
+      }
     }
+    // 标记非首次加载
+    this.setData({
+      isFirstLoad: false
+    })
   },
 
   // 获取用户信息
@@ -46,11 +58,28 @@ Page({
         userInfo: e.detail.userInfo,
         hasUserInfo: true
       })
+      this.loadRecipesWithCache()
+    }
+  },
+
+  // 带缓存的加载菜谱列表
+  loadRecipesWithCache: function() {
+    // 先检查是否有缓存数据
+    const cachedRecipes = app.globalData.cachedRecipes || []
+    
+    if (cachedRecipes.length > 0) {
+      // 有缓存数据，直接使用
+      this.setData({
+        recipes: cachedRecipes,
+        loading: false
+      })
+    } else {
+      // 无缓存数据，从数据库加载
       this.loadRecipes()
     }
   },
 
-  // 加载菜谱列表
+  // 从数据库加载菜谱列表
   loadRecipes: function() {
     const db = wx.cloud.database()
     const that = this
@@ -70,10 +99,17 @@ Page({
           })
           .get()
           .then(res => {
+            // 更新数据并缓存
+            const recipes = res.data
+            app.globalData.cachedRecipes = recipes
+            
             that.setData({
-              recipes: res.data,
+              recipes: recipes,
               loading: false
             })
+            
+            // 如果是下拉刷新，停止下拉刷新动画
+            wx.stopPullDownRefresh()
           })
           .catch(err => {
             console.error('加载菜谱失败', err)
@@ -82,6 +118,8 @@ Page({
               icon: 'none'
             })
             that.setData({ loading: false })
+            // 如果是下拉刷新，停止下拉刷新动画
+            wx.stopPullDownRefresh()
           })
       },
       fail: err => {
@@ -91,8 +129,20 @@ Page({
           icon: 'none'
         })
         that.setData({ loading: false })
+        // 如果是下拉刷新，停止下拉刷新动画
+        wx.stopPullDownRefresh()
       }
     })
+  },
+
+  // 下拉刷新处理函数
+  onPullDownRefresh: function() {
+    // 下拉刷新时，强制从数据库重新加载数据
+    if (this.data.hasUserInfo) {
+      this.loadRecipes()
+    } else {
+      wx.stopPullDownRefresh()
+    }
   },
 
   // 跳转到添加菜谱页
@@ -134,6 +184,7 @@ Page({
               wx.showToast({
                 title: '删除成功'
               })
+              // 删除成功后，更新缓存和页面数据
               that.loadRecipes()
             })
             .catch(err => {
